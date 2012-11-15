@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/lib/vcard_mate/version'
 
 spec = Gem::Specification.new do |s|
   s.name = 'vcard_mate'
-  s.version = VCardMate::Version
+  s.version = VCardMate::VERSION
   s.author = 'Matt Morgan'
   s.email = 'matt@mlmorg.com'
   s.license = 'MIT'
