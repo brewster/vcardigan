@@ -55,6 +55,7 @@ PHOTO;TYPE=uri:http://strummer.com/joe.jpg
 EMAIL;TYPE=work,internet;PREF=1:joe@strummer.com
 item1.URL:http://strummer.com
 item1.LABEL:Other
+END:VCARD
 ```
 
 ### Parsing a vCard
