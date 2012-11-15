@@ -38,7 +38,7 @@ vcard.to_s
 ``` ruby
 vcard = VCardMate.create
 vcard.name 'Strummer', 'Joe'
-vcard.fullname = 'Joe Strummer'
+vcard.fullname 'Joe Strummer'
 vcard.photo 'http://strummer.com/joe.jpg', :type => 'uri'
 vcard.email 'joe@strummer.com', :type => ['work', 'internet'], :preferred => 1
 vcard[:item1].url 'http://strummer.com'
@@ -55,6 +55,7 @@ PHOTO;TYPE=uri:http://strummer.com/joe.jpg
 EMAIL;TYPE=work,internet;PREF=1:joe@strummer.com
 item1.URL:http://strummer.com
 item1.LABEL:Other
+END:VCARD
 ```
 
 ### Parsing a vCard
