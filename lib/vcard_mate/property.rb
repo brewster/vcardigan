@@ -26,8 +26,18 @@ module VCardMate
       # Build out the values/params from the passed arguments
       args.each do |arg|
         if arg.is_a? Hash
-          arg.each do |key, value|
-            @params[key.to_s.downcase] = value.to_s
+          arg.each do |param, value|
+            param = param.to_s.downcase
+            value = value.to_s
+
+            # Create array of param values if we have an existing param name
+            # present in the hash
+            if @params[param]
+              @params[param] = [@params[param]]
+              @params[param].push(value)
+            else
+              @params[param] = value
+            end
           end
         else
           @values.push arg.to_s
