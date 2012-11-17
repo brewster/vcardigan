@@ -34,6 +34,14 @@ module VCardMate
         end
       end
     end
+    
+    def value(idx = 0)
+      @values[idx]
+    end
+
+    def param(name)
+      name ? @params[name.to_s.downcase] : nil
+    end
 
     def self.parse(vcard, data)
       # Gather the parts
