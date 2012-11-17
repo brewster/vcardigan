@@ -2,9 +2,9 @@ module VCardMate
 
   class Property
 
-    attr_accessor :params
-    attr_accessor :values
     attr_accessor :group
+    attr_reader :params
+    attr_reader :values
 
     def initialize(vcard, name, *args)
       @vcard = vcard
@@ -29,15 +29,7 @@ module VCardMate
           arg.each do |param, value|
             param = param.to_s.downcase
             value = value.to_s
-
-            # Create array of param values if we have an existing param name
-            # present in the hash
-            if @params[param]
-              @params[param] = [@params[param]]
-              @params[param].push(value)
-            else
-              @params[param] = value
-            end
+            add_param(param, value) unless has_param?(param, value)
           end
         else
           @values.push arg.to_s
@@ -99,6 +91,28 @@ module VCardMate
       end
 
       return property
+    end
+
+    private
+
+    def has_param?(name, value)
+      false
+    end
+
+    def add_param(name, value)
+      name = name.to_s.downcase
+      value = value.to_s
+      if @params[param]
+        # Create array of param values if we have an existing param name
+        # present in the hash
+        unless @params[params].is_a? Array
+          @params[param] = [@params[param]]
+        end
+        @params[param].push(value)
+      else
+        # Default is to just set the param to the value
+        @params[param] = value
+      end
     end
 
   end
