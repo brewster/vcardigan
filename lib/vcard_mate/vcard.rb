@@ -21,7 +21,7 @@ module VCardMate
 
         # Add the parsed properties to this vCard
         lines.each_line do |line|
-          property = VCardMate::Property.parse(line)
+          property = VCardMate::Property.parse(self, line)
           add_prop(property)
         end
       end
@@ -44,7 +44,7 @@ module VCardMate
         end
 
         # Add property to vCard
-        property = VCardMate::Property.new(method, *args)
+        property = build_prop(method, *args)
         add_prop(property)
       end
     end
@@ -74,12 +74,16 @@ module VCardMate
       end
     end
 
+    def build_prop(name, *args)
+      VCardMate::Property.new(self, name, *args)
+    end
+
     def to_s
       # Start vCard
-      vcard = VCardMate::Property.new(:begin, 'VCARD').to_s << "\n"
+      vcard = build_prop(:begin, 'VCARD').to_s << "\n"
 
       # Add version
-      vcard << VCardMate::Property.new(:version, @version).to_s << "\n"
+      vcard << build_prop(:version, @version).to_s << "\n"
 
       # Add the properties
       @fields.each do |field, properties|
@@ -89,7 +93,7 @@ module VCardMate
       end
 
       # END
-      vcard << VCardMate::Property.new(:end, 'VCARD').to_s << "\n"
+      vcard << build_prop(:end, 'VCARD').to_s << "\n"
 
       # Return vCard
       return vcard

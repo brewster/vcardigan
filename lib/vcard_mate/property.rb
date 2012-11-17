@@ -6,7 +6,8 @@ module VCardMate
     attr_accessor :values
     attr_accessor :group
 
-    def initialize(name, *args)
+    def initialize(vcard, name, *args)
+      @vcard = vcard
       @params = {}
       @values = []
       @group = nil
@@ -34,7 +35,7 @@ module VCardMate
       end
     end
 
-    def self.parse(data)
+    def self.parse(vcard, data)
       # Gather the parts
       data = data.strip
       parts = data.split(':', 2)
@@ -42,20 +43,20 @@ module VCardMate
       params = parts.first.split(';')
       name = params.shift
       
-      # Create argument array beginning with name
-      args = [name]
+      # Create argument array
+      args = [vcard, name]
 
-      # Add values to args
+      # Add values to array
       args.concat(values)
 
-      # Add params to args
+      # Add params to array
       params.each do |param|
         keyval = param.split('=')
         hash = Hash[keyval.first, keyval.last]
         args.push(hash)
       end
 
-      # Instantiate a new class with the args
+      # Instantiate a new class with the argument array
       new(*args)
     end
 
