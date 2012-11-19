@@ -78,7 +78,7 @@ module VCardMate
 
       # Params
       @params.each_with_index do |(key, value), idx|
-        property << ';' if idx === 0
+        property << ';'
         property << key.upcase << '=' << value
       end
 
