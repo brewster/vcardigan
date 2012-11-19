@@ -9,6 +9,7 @@ module VCardMate
     def initialize(version = '4.0')
       @version = version
       @fields = {}
+      @groups = {}
       @group = nil
     end
 
@@ -44,23 +45,17 @@ module VCardMate
     end
 
     def add(name, *args)
-      # Create a field on the fields hash, if not already present, to house
-      # the property
-      unless @fields.has_key? name
-        @fields[name] = []
-      end
-
-      # If there's a group, add it to the name
       if @group
+        # If there's a group, add it to the name
         name = "#{@group}.#{name}"
+        
+        # Reset group to nil
         @group = nil
       end
 
-      # Build the property
+      # Build the property and add it to the vCard
       property = build_prop(name, *args)
-      
-      # Add the property to the field array
-      @fields[name].push(property)
+      add_prop(property)
     end
 
     def get(name)
@@ -111,6 +106,31 @@ module VCardMate
 
     def build_prop(name, *args)
       VCardMate::Property.new(self, name, *args)
+    end
+
+    def add_prop(property)
+      name = property.name
+      group = property.group
+
+      # Create a field on the fields hash, if not already present, to house
+      # the property
+      unless @fields.has_key? name
+        @fields[name] = []
+      end
+      
+      # Add the property to the field array
+      @fields[name].push(property)
+
+      if group
+        # Add a field on the groups hash, if not already present, to house the
+        # group properties
+        unless @groups.has_key? group
+          @groups[group] = []
+        end
+
+        # Add the property to the groups array
+        @groups[group].push(property)
+      end
     end
 
   end

@@ -3,6 +3,7 @@ module VCardMate
   class Property
 
     attr_accessor :group
+    attr_reader :name
     attr_reader :params
     attr_reader :values
 
