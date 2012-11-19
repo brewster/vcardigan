@@ -36,8 +36,8 @@ module VCardMate
 
     def method_missing(method, *args)
       if args.empty?
-        # Return the property/properties when no arguments are passed
-        get(method)
+        # Return the field property/properties when no arguments are passed
+        field(method)
       else
         # Add property to vCard
         add(method, *args)
@@ -58,16 +58,16 @@ module VCardMate
       add_prop(property)
     end
 
-    def get(name)
+    def field(name)
       field = @fields[name.to_s.downcase]
-      case field.length
-      when 0
-        nil
-      when 1
-        field.first
-      else
-        field
+      if field and field.length === 1
+        return field.first
       end
+      field
+    end
+
+    def group(name)
+      @groups[name]
     end
 
     def to_s
