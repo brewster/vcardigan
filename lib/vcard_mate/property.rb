@@ -102,16 +102,16 @@ module VCardMate
     def add_param(name, value)
       name = name.to_s.downcase
       value = value.to_s
-      if @params[param]
+      if @params[name]
         # Create array of param values if we have an existing param name
         # present in the hash
-        unless @params[params].is_a? Array
-          @params[param] = [@params[param]]
+        unless @params[name].is_a? Array
+          @params[name] = [@params[name]]
         end
-        @params[param].push(value)
+        @params[name].push(value)
       else
         # Default is to just set the param to the value
-        @params[param] = value
+        @params[name] = value
       end
     end
 
