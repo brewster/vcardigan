@@ -36,33 +36,34 @@ module VCardMate
     def method_missing(method, *args)
       if args.empty?
         # Return the property/properties when no arguments are passed
-        get_prop(method)
+        get(method)
       else
-        # If there's a group, add it
-        if @group
-          method = "#{@group}.#{method}"
-        end
-
         # Add property to vCard
-        property = build_prop(method, *args)
-        add_prop(property)
+        add(method, *args)
       end
     end
 
-    def add_prop(property)
-      name = property.instance_variable_get(:@name)
-
+    def add(name, *args)
       # Create a field on the fields hash, if not already present, to house
       # the property
       unless @fields.has_key? name
         @fields[name] = []
       end
+
+      # If there's a group, add it to the name
+      if @group
+        name = "#{@group}.#{name}"
+        @group = nil
+      end
+
+      # Build the property
+      property = build_prop(name, *args)
       
       # Add the property to the field array
       @fields[name].push(property)
     end
 
-    def get_prop(name)
+    def get(name)
       field = @fields[name.to_s.downcase]
       case field.length
       when 0
@@ -72,10 +73,6 @@ module VCardMate
       else
         field
       end
-    end
-
-    def build_prop(name, *args)
-      VCardMate::Property.new(self, name, *args)
     end
 
     def to_s
@@ -107,6 +104,13 @@ module VCardMate
 
     def fullname(*args)
       fn(*args)
+    end
+
+    # Private ##########
+    private
+
+    def build_prop(name, *args)
+      VCardMate::Property.new(self, name, *args)
     end
 
   end
