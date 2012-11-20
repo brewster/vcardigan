@@ -105,7 +105,7 @@ module VCardMate
     private
 
     def build_prop(name, *args)
-      VCardMate::Property.new(self, name, *args)
+      VCardMate::Property.create(self, name, *args)
     end
 
     def add_prop(property)

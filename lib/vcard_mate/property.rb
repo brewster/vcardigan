@@ -13,6 +13,8 @@ module VCardMate
       @values = []
       @group = nil
 
+      setup if respond_to? :setup
+
       # Determine whether this property name has a group
       name_parts = name.to_s.split('.', 2)
 
@@ -25,6 +27,7 @@ module VCardMate
       @name = name_parts.last.downcase
 
       # Build out the values/params from the passed arguments
+      valueIdx = 0
       args.each do |arg|
         if arg.is_a? Hash
           arg.each do |param, value|
@@ -33,17 +36,25 @@ module VCardMate
             add_param(param, value) unless has_param?(param, value)
           end
         else
-          @values.push arg.to_s
+          add_value(arg.to_s, valueIdx)
+          valueIdx += 1
         end
       end
     end
-    
-    def value(idx = 0)
-      @values[idx]
-    end
 
-    def param(name)
-      name ? @params[name.to_s.downcase] : nil
+    def self.create(vcard, name, *args)
+      name = name.to_s.downcase
+      classname = ''
+
+      case name
+      when 'n'
+        className = 'NameProperty'
+      else
+        className = 'Property'
+      end
+
+      cls = Module.const_get('VCardMate').const_get(className)
+      cls.new(vcard, name, *args)
     end
 
     def self.parse(vcard, data)
@@ -68,7 +79,15 @@ module VCardMate
       end
 
       # Instantiate a new class with the argument array
-      new(*args)
+      self.create(*args)
+    end
+    
+    def value(idx = 0)
+      @values[idx]
+    end
+
+    def param(name)
+      name ? @params[name.to_s.downcase] : nil
     end
 
     def to_s
@@ -95,6 +114,10 @@ module VCardMate
     end
 
     private
+
+    def add_value(value, idx)
+      @values.push(value)
+    end
 
     def has_param?(name, value)
       false
