@@ -1,6 +1,7 @@
 require_relative 'vcard_mate/version'
 require_relative 'vcard_mate/vcard'
 require_relative 'vcard_mate/property'
+require_relative 'vcard_mate/properties/name_property'
 
 module VCardMate
 
