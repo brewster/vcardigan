@@ -156,10 +156,11 @@ module VCardMate
           return nil
         end
         name = v3? ? 'type' : 'pref'
-        value = v3? ? 'pref' : value.is_a?(Numeric) ? value.to_s : '1'
+        value = v3? ? 'pref' : value.is_a?(Numeric) ? value : 1
       else
       end
-      name.upcase << '=' << value
+      value = value.to_s
+      name.upcase << '=' << value unless value.empty?
     end
 
   end
