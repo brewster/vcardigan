@@ -31,8 +31,9 @@ module VCardMate
       args.each do |arg|
         if arg.is_a? Hash
           arg.each do |param, value|
-            param = param.to_s.downcase
-            add_param(param, value) unless has_param?(param, value)
+            param = param_name(param.to_s.downcase, value)
+            value = param_value(param, value)
+            add_param(param, value)
           end
         else
           add_value(arg.to_s, valueIdx)
@@ -126,12 +127,34 @@ module VCardMate
       version == '4.0'
     end
 
-    def add_value(value, idx)
-      @values.push(value)
+    def param_name(name, value)
+      case name
+      when 'type'
+        if value == 'pref'
+          name = 'preferred'
+        end
+      when 'pref'
+        name = 'preferred'
+      end
+      name
     end
 
-    def has_param?(name, value)
-      false
+    def param_value(name, value)
+      case name
+      when 'preferred'
+        number = value.to_i
+        if number > 0
+          value = number
+        else 
+          value = nil if value.downcase == 'false' or value == '0'
+          value = 1 if value
+        end
+      end
+      value
+    end
+
+    def add_value(value, idx)
+      @values.push(value)
     end
 
     def add_param(name, value)

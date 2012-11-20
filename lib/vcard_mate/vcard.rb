@@ -59,11 +59,7 @@ module VCardMate
     end
 
     def field(name)
-      field = @fields[name.to_s.downcase]
-      if field and field.length === 1
-        return field.first
-      end
-      field
+      @fields[name.to_s.downcase]
     end
 
     def group(name)
