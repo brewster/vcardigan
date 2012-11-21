@@ -2,6 +2,8 @@ module VCardMate
 
   class Property
 
+    APPLE_LABEL = /_\$!<(.*?)>!\$_/
+
     attr_accessor :group
     attr_reader :name
     attr_reader :params
@@ -36,7 +38,8 @@ module VCardMate
             add_param(param, value)
           end
         else
-          add_value(arg.to_s, valueIdx)
+          value = parse_value(arg.to_s)
+          add_value(value, valueIdx)
           valueIdx += 1
         end
       end
@@ -149,6 +152,15 @@ module VCardMate
           value = nil if value.downcase == 'false' or value == '0'
           value = 1 if value
         end
+      end
+      value
+    end
+
+    def parse_value(value)
+      # Parse Apple labels
+      match = value.match(APPLE_LABEL)
+      if match
+        value = match[1]
       end
       value
     end
