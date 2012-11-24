@@ -60,7 +60,7 @@ module VCardMate
 
     def field(name)
       name = name.to_s.downcase
-      if @group
+      if @group and @fields[name]
         # Finds all items that match the prop type in the group
         fields = @fields[name].find_all do |prop|
           true if prop.group == @group
