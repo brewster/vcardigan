@@ -145,6 +145,7 @@ module VCardMate
     def param_value(name, value)
       case name
       when 'preferred'
+        value = value.to_s
         number = value.to_i
         if number > 0
           value = number
