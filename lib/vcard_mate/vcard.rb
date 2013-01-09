@@ -18,7 +18,7 @@ module VCardMate
       if match
         # Set version number
         @version = match[2]
-        lines = "#{match[1]}#{match[3]}"
+        lines = "#{match[1].strip}#{match[3].strip}"
 
         # Add the parsed properties to this vCard
         lines.each_line do |line|
