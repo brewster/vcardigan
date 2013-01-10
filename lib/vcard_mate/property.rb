@@ -113,7 +113,8 @@ module VCardMate
         property << value
       end
 
-      line_fold(property)
+      #line_fold(property)
+      property
     end
 
     private
