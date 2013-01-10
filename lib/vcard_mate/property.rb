@@ -113,7 +113,7 @@ module VCardMate
         property << value
       end
 
-      return property
+      line_fold(property)
     end
 
     private
@@ -197,6 +197,20 @@ module VCardMate
       end
       value = value.to_s
       name.upcase << '=' << value unless value.empty?
+    end
+
+    def line_fold(string)
+      chars = 75
+      out = ''
+      while string.length > 0
+        if string.length > chars
+          amount = out.empty? ? chars : chars - 1
+          out += "#{string.slice!(0, amount)}\n "
+        else
+          out += string.slice!(0, string.length)
+        end
+      end
+      out
     end
 
   end
