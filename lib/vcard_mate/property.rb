@@ -203,7 +203,7 @@ module VCardMate
       chars = @vcard.chars
       out = ''
       while string.length > 0
-        if string.length > chars
+        if string.length >= chars
           amount = out.empty? ? chars : chars - 1
           out += "#{string.slice!(0, amount)}\n "
         else
