@@ -5,10 +5,12 @@ module VCardMate
     VCARD_PATTERN = /BEGIN:VCARD\s+(.*?)VERSION:(.+?)\s+(.+?)END:VCARD/m;
 
     attr_accessor :version
+    attr_accessor :chars
 
     def initialize(options)
       # Default options
       @version = options[:version] || '4.0'
+      @chars = options[:chars] || 75
 
       @fields = {}
       @groups = {}

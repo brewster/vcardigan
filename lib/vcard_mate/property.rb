@@ -113,8 +113,7 @@ module VCardMate
         property << value
       end
 
-      #line_fold(property)
-      property
+      line_fold(property)
     end
 
     private
@@ -201,7 +200,7 @@ module VCardMate
     end
 
     def line_fold(string)
-      chars = 75
+      chars = @vcard.chars
       out = ''
       while string.length > 0
         if string.length > chars
