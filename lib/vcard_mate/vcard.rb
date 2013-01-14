@@ -6,8 +6,10 @@ module VCardMate
 
     attr_accessor :version
 
-    def initialize(version = '4.0')
-      @version = version
+    def initialize(options)
+      # Default options
+      @version = options[:version] || '4.0'
+
       @fields = {}
       @groups = {}
       @group = nil
