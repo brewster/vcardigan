@@ -7,7 +7,12 @@ module VCardMate
     attr_accessor :version
     attr_accessor :chars
 
-    def initialize(options)
+    def initialize(options = {})
+      # Backwards compatibility
+      if options.is_a? String
+        options = { :version => options }
+      end
+
       # Default options
       @version = options[:version] || '4.0'
       @chars = options[:chars] || 75
