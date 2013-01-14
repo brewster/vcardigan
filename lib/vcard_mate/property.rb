@@ -201,13 +201,17 @@ module VCardMate
 
     def line_fold(string)
       chars = @vcard.chars
-      out = ''
-      while string.length > 0
-        if string.length >= chars
-          amount = out.empty? ? chars : chars - 1
-          out += "#{string.slice!(0, amount)}\n "
-        else
-          out += string.slice!(0, string.length)
+      if chars == 0
+        out = string
+      else
+        out = ''
+        while string.length > 0
+          if string.length >= chars
+            amount = out.empty? ? chars : chars - 1
+            out += "#{string.slice!(0, amount)}\n "
+          else
+            out += string.slice!(0, string.length)
+          end
         end
       end
       out
