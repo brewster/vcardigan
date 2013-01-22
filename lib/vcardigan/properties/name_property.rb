@@ -1,4 +1,4 @@
-module VCardMate
+module VCardigan
 
   class NameProperty < Property
 

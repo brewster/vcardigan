@@ -1,4 +1,4 @@
-module VCardMate
+module VCardigan
 
   class VCard
 
@@ -31,7 +31,7 @@ module VCardMate
 
         # Add the parsed properties to this vCard
         lines.each_line do |line|
-          property = VCardMate::Property.parse(self, line)
+          property = VCardigan::Property.parse(self, line)
           add_prop(property)
         end
       end
@@ -122,7 +122,7 @@ module VCardMate
     private
 
     def build_prop(name, *args)
-      VCardMate::Property.create(self, name, *args)
+      VCardigan::Property.create(self, name, *args)
     end
 
     def add_prop(property)

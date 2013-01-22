@@ -1,4 +1,4 @@
-module VCardMate
+module VCardigan
 
   class Property
 
@@ -56,7 +56,7 @@ module VCardMate
         className = 'Property'
       end
 
-      cls = Module.const_get('VCardMate').const_get(className)
+      cls = Module.const_get('VCardigan').const_get(className)
       cls.new(vcard, name, *args)
     end
 
