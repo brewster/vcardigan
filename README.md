@@ -20,7 +20,7 @@ vcard = VCardigan.create(:version => '3.0')
 
 ### vCard Versions
 
-VCardigan supports vCard versions `3.0` and `4.0`. Support for `2.1` is not
+vCardigan supports vCard versions `3.0` and `4.0`. Support for `2.1` is not
 currently expected. You may pass the version number as an argument to
 `VCardigan.create`; the default is `4.0`. You may also change the version at
 any time:
