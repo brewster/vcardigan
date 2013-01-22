@@ -72,7 +72,7 @@ module VCardigan
       if @group and @fields[name]
         # Finds all items that match the prop type in the group
         fields = @fields[name].find_all do |prop|
-          true if prop.group == @group
+          prop.group == @group.to_s
         end
 
         # Reset the group to nil and return the fields

@@ -134,4 +134,45 @@ describe VCardigan::VCard do
     end
   end
 
+  describe '#field' do
+    let(:vcard) { VCardigan.create }
+    let(:fields) { vcard.instance_variable_get(:@fields) }
+    let(:name) { :email }
+    let(:value) { 'joe@strummer.com' }
+
+    context 'no group' do
+      before do
+        vcard.send(name, value)
+      end
+
+      it 'should return field name array' do
+        vcard.field(name).should == fields[name.to_s]
+      end
+
+      it 'should have correct property in array' do
+        vcard.field(name).first.value.should == value
+      end
+    end
+
+    context 'with group' do
+      let(:group) { :item1 }
+      let(:value2) { 'joestrummer@strummer.com' }
+
+      before do
+        vcard.send(name, value)
+        vcard[group].send(name, value2)
+      end
+
+      it 'should return field name array with props within group' do
+        vcard[group].field(name).should == fields[name.to_s].find_all do |prop|
+          prop.group == group.to_s
+        end
+      end
+
+      it 'should have correct property in array' do
+        vcard[group].field(name).first.value.should == value2
+      end
+    end
+  end
+
 end
