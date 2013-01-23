@@ -175,4 +175,22 @@ describe VCardigan::VCard do
     end
   end
 
+  describe 'Aliases' do
+    let(:vcard) { VCardigan.create }
+
+    context '#name' do
+      it 'should call method_missing with method n' do
+        vcard.should_receive(:method_missing).with(:n)
+        vcard.name
+      end
+    end
+    
+    context '#fullname' do
+      it 'should call method_missing with method fn' do
+        vcard.should_receive(:method_missing).with(:fn)
+        vcard.fullname
+      end
+    end
+  end
+
 end
