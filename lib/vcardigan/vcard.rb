@@ -88,6 +88,9 @@ module VCardigan
     end
 
     def to_s
+      # Raise errors if invalid
+      validate
+
       # Start vCard
       vcard = build_prop(:begin, 'VCARD').to_s << "\n"
 
@@ -147,6 +150,13 @@ module VCardigan
 
         # Add the property to the groups array
         @groups[group].push(property)
+      end
+    end
+
+    def validate
+      unless @fields['fn']
+        raise VCardigan::EncodingError,
+          "vCards must include an FN field"
       end
     end
 

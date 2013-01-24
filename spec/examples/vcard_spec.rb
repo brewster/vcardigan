@@ -193,4 +193,41 @@ describe VCardigan::VCard do
     end
   end
 
+  describe '#to_s' do
+    let(:vcard) { VCardigan.create }
+
+    context 'with no FN' do
+      it 'should raise an error' do
+        expect { vcard.to_s }.to raise_error(VCardigan::EncodingError)
+      end
+    end
+
+    context 'with an FN and N' do
+      before do
+        vcard.name('Strummer', 'Joe')
+        vcard.fullname('Joe Strummer')
+      end
+
+      it 'should have BEGIN on first line' do
+        vcard.to_s.split("\n").first.should == 'BEGIN:VCARD'
+      end
+
+      it 'should proceed with VERSION' do
+        vcard.to_s.split("\n")[1].should == 'VERSION:4.0'
+      end
+
+      it 'should include the N field' do
+        vcard.to_s.split("\n")[2].should == 'N:Strummer;Joe;;;'
+      end
+
+      it 'should include the FN field' do
+        vcard.to_s.split("\n")[3].should == 'FN:Joe Strummer'
+      end
+
+      it 'should end with END' do
+        vcard.to_s.split("\n").last.should == 'END:VCARD'
+      end
+    end
+  end
+
 end
