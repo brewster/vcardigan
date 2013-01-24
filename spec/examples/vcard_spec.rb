@@ -230,4 +230,21 @@ describe VCardigan::VCard do
     end
   end
 
+  describe '#parse' do
+    context 'valid 4.0 vCard' do
+      let(:data) { File.read(File.dirname(__FILE__) + '/../helpers/joe.vcf') }
+      let(:vcard) { VCardigan.parse(data) }
+      let(:fields) { vcard.instance_variable_get(:@fields) }
+
+      it 'should set the version' do
+        vcard.version.should == '4.0'
+      end
+
+      it 'should add the properties to the fields array' do
+        fields.should have_key('n')
+        fields.should have_key('fn')
+      end
+    end
+  end
+
 end
