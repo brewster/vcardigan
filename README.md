@@ -66,8 +66,8 @@ Using the above output as `data`, we could parse it as such:
 ``` ruby
 vcard = VCardigan.parse(data)
 
-vcard.n.values # ['strummer', 'joe', '', '', '']
-vcard.photo.params # { 'type' => 'uri' }
-vcard.email.params # { 'type' => ['work', 'internet'], 'preferred' => '1' }
-vcard[:item1].url.value # http://strummer.com
+vcard.n.first.values # ['strummer', 'joe', '', '', '']
+vcard.photo.first.params # { 'type' => 'uri' }
+vcard.email.first.params # { 'type' => ['work', 'internet'], 'preferred' => '1' }
+vcard[:item1].url.first.value # http://strummer.com
 ```
