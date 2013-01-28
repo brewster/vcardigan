@@ -95,6 +95,42 @@ describe VCardigan::Property do
     it 'should return the property vCard formatted' do
       prop.to_s.should == "#{group}.#{name.upcase};TYPE=#{params[:type]}:#{value}"
     end
+
+    context 'with properties that return long strings' do
+      let(:value) { 'qwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwertqwert' }
+      let(:prop) { VCardigan::Property.create(vcard, "#{group}.#{name}", value, params) }
+
+      it 'should line fold at 75 chars' do
+        prop.to_s.split("\n").each do |line|
+          line.length.should <= 75
+        end
+      end
+
+      context 'when chars option is set to 50' do
+        let(:chars) { 50 }
+        let(:vcard) { VCardigan.create(:chars => chars) }
+        let(:prop) { VCardigan::Property.create(vcard, "#{group}.#{name}", value, params) }
+
+        it 'should line fold at 50 chars' do
+          prop.to_s.split("\n").each do |line|
+            line.length.should <= 50
+          end
+        end
+      end
+
+      context 'when chars option is set to 0' do
+        let(:chars) { 0 }
+        let(:vcard) { VCardigan.create(:chars => chars) }
+        let(:prop) { VCardigan::Property.create(vcard, "#{group}.#{name}", value, params) }
+
+        it 'should not line fold' do
+          ret = "#{group}.#{name.upcase};TYPE=#{params[:type]}:#{value}"
+          prop.to_s.split("\n").length.should == 1
+          prop.to_s.length.should == ret.length
+        end
+      end
+    end
+
   end
 
   describe '#parse' do
