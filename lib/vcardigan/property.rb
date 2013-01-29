@@ -30,12 +30,18 @@ module VCardigan
 
       # Build out the values/params from the passed arguments
       valueIdx = 0
+
       args.each do |arg|
         if arg.is_a? Hash
           arg.each do |param, value|
             param = param_name(param.to_s.downcase, value)
             value = param_value(param, value)
             add_param(param, value)
+          end
+        elsif arg.is_a?(Array)
+          arg.each do |item|
+            add_value(parse_value(item.to_s), valueIdx)
+            valueIdx += 1
           end
         else
           value = parse_value(arg.to_s)
@@ -67,7 +73,7 @@ module VCardigan
       values = parts.last.split(';')
       params = parts.first.split(';')
       name = params.shift
-      
+
       # Create argument array
       args = [vcard, name]
 
@@ -84,7 +90,7 @@ module VCardigan
       # Instantiate a new class with the argument array
       self.create(*args)
     end
-    
+
     def value(idx = 0)
       @values[idx]
     end
@@ -149,7 +155,7 @@ module VCardigan
         number = value.to_i
         if number > 0
           value = number
-        else 
+        else
           value = nil if value.downcase == 'false' or value == '0'
           value = 1 if value
         end
