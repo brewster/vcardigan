@@ -1,14 +1,13 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe VCardigan::Property do
+  let(:vcard) { VCardigan.create }
+  let(:name) { :email }
+  let(:value) { 'joe@strummer.com' }
+  let(:params) { { :type => 'uri' } }
 
   describe '#init' do
-    let(:vcard) { VCardigan.create }
-
     context 'without a group' do
-      let(:name) { :email }
-      let(:value) { 'joe@strummer.com' }
-      let(:params) { { :type => 'uri' } }
       let(:prop) { VCardigan::Property.create(vcard, name, value, params) }
 
       it 'should set the name' do
@@ -22,9 +21,6 @@ describe VCardigan::Property do
   end
 
   describe '#values' do
-    let(:vcard) { VCardigan.create }
-    let(:name) { :email }
-    let(:value) { 'joe@strummer.com' }
     let(:prop) { VCardigan::Property.create(vcard, name, value) }
     
     it 'should return the values array' do
@@ -33,11 +29,10 @@ describe VCardigan::Property do
   end
 
   describe '#value' do
-    let(:vcard) { VCardigan.create }
     let(:name) { :n }
-    let(:value1) { 'Strummer' }
-    let(:value2) { 'Joe' }
-    let(:prop) { VCardigan::Property.create(vcard, name, value1, value2) }
+    let(:value) { 'Strummer' }
+    let(:another_value) { 'Joe' }
+    let(:prop) { VCardigan::Property.create(vcard, name, value, another_value) }
 
     context 'without an index' do
       it 'should return the first item from the values array' do
@@ -53,10 +48,6 @@ describe VCardigan::Property do
   end
 
   describe '#params' do
-    let(:vcard) { VCardigan.create }
-    let(:name) { :email }
-    let(:value) { 'joe@strummer.com' }
-    let(:params) { { :type => 'uri' } }
     let(:prop) { VCardigan::Property.create(vcard, name, value, params) }
 
     it 'should return the params array' do
@@ -65,10 +56,6 @@ describe VCardigan::Property do
   end
 
   describe '#param' do
-    let(:vcard) { VCardigan.create }
-    let(:name) { :email }
-    let(:value) { 'joe@strummer.com' }
-    let(:params) { { :type => 'uri' } }
     let(:prop) { VCardigan::Property.create(vcard, name, value, params) }
 
     context 'with a param that exists' do
@@ -85,11 +72,7 @@ describe VCardigan::Property do
   end
 
   describe '#to_s' do
-    let(:vcard) { VCardigan.create }
-    let(:name) { :email }
     let(:group) { :item1 }
-    let(:value) { 'joe@strummer.com' }
-    let(:params) { { :type => 'uri' } }
     let(:prop) { VCardigan::Property.create(vcard, "#{group}.#{name}", value, params) }
 
     it 'should return the property vCard formatted' do
@@ -134,11 +117,7 @@ describe VCardigan::Property do
   end
 
   describe '#parse' do
-    let(:vcard) { VCardigan.create }
-    let(:name) { :email }
     let(:group) { :item1 }
-    let(:value) { 'joe@strummer.com' }
-    let(:params) { { :type => 'uri' } }
     let(:string) { "#{group}.#{name.upcase};TYPE=#{params[:type]}:#{value}" }
     let(:prop) { VCardigan::Property.parse(vcard, string) }
 
