@@ -36,7 +36,7 @@ end
 When adding a property, you can either do so via a block or simply by passing
 the associated values and/or parameters as arguments.
 
-#### Block format
+##### Block format
 
 The block format is useful for properties with many component values. Most of
 these compound properties have helper methods to aid in its creation (a list of
@@ -56,7 +56,7 @@ end
 N;LANGUAGE=en:Strummer;Joe;;;
 ```
 
-#### Argument format
+##### Argument format
 
 Alternatively, you could create the same property by passing the compound
 values as arguments. *Note: Arguments must be passed in the order specified by
@@ -72,9 +72,9 @@ end
 N;LANGUAGE=en:Strummer;Joe;;;
 ```
 
-#### Groups
+##### Groups
 
-#### Multiple values
+##### Multiple values
 
 Commas in any value will be escaped as defined in the
 [specification](http://tools.ietf.org/html/rfc6350#section-3.4) unless you
@@ -90,6 +90,40 @@ end
 N:Strummer;Joe;Joseph,Woody;;
 ```
 
+### Parsing a vCard
+
+Using the following output:
+
+```
+BEGIN:VCARD
+N:Strummer;Joe;;;
+FN:Joe Strummer
+END:VCARD
+```
+We could parse the name, like so:
+
+``` ruby
+vcard = VCardigan.parse(vcard)
+vcard.fullname
+```
+```
+Joe Strummer
+```
+
+### Editing properties of a vCard
+
+You can edit properties using the `edit` method on an existing vCardigan
+instance. Using the above example, you could change the name like this:
+
+``` ruby
+vcard.edit do |vcard|
+  vcard.name :first => "Joseph"
+end
+```
+```
+N:Strummer;Bro;;;
+```
+
 ### vCard Versions
 
 vCardigan supports vCard versions `3.0` and `4.0`. Support for `2.1` is not
@@ -99,16 +133,4 @@ any time:
 
 ``` ruby
 vcard.version '4.0'
-```
-
-### Parsing a vCard
-
-Using the above output as `data`, we could parse it as such:
-``` ruby
-vcard = VCardigan.parse(data)
-
-vcard.n.first.values # ['strummer', 'joe', '', '', '']
-vcard.photo.first.params # { 'type' => 'uri' }
-vcard.email.first.params # { 'type' => ['work', 'internet'], 'preferred' => '1' }
-vcard[:item1].url.first.value # http://strummer.com
 ```
