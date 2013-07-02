@@ -2,7 +2,7 @@ module VCardigan
 
   class VCard
 
-    VCARD_PATTERN = /BEGIN:VCARD\s+(.*?)VERSION:(.+?)\s+(.+?)END:VCARD/m;
+    VCARD_PATTERN = /BEGIN:VCARD\s+(.*?)VERSION:(.+?)\s+(.*?)END:VCARD/m;
 
     attr_accessor :version
     attr_accessor :chars
