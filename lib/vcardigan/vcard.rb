@@ -2,7 +2,9 @@ module VCardigan
 
   class VCard
 
-    VCARD_PATTERN = /BEGIN:VCARD\s+(.*?)VERSION:(.+?)\s+(.+?)END:VCARD/m;
+    # A quoted-printable encoded string with a trailing '=', indicating that
+    # it's not terminated
+    UNTERMINATED_QUOTED_PRINTABLE = /ENCODING=QUOTED-PRINTABLE:.*=$/
 
     attr_accessor :version
     attr_accessor :chars
@@ -23,18 +25,18 @@ module VCardigan
     end
 
     def parse(data)
-      match = VCARD_PATTERN.match(data)
-      if match
-        # Set version number
-        @version = match[2]
-        lines = "#{match[1].strip}#{match[3].strip}"
+      lines = unfold(data)
 
-        # Add the parsed properties to this vCard
-        lines.each_line do |line|
-          property = VCardigan::Property.parse(self, line)
-          add_prop(property)
+      # Add the parsed properties to this vCard
+      lines.each do |line|
+        if line =~ /^VERSION:(.+)/
+          @version = $1
         end
+
+        property = VCardigan::Property.parse(self, line)
+        add_prop(property)
       end
+
       self
     end
 
@@ -57,7 +59,7 @@ module VCardigan
       if @group
         # If there's a group, add it to the name
         name = "#{@group}.#{name}"
-        
+
         # Reset group to nil
         @group = nil
       end
@@ -124,6 +126,39 @@ module VCardigan
     # Private ##########
     private
 
+    # Split on \r\n or \n to get the lines, unfold continued lines (they
+    # start with " " or \t), and return the array of unfolded lines.
+    #
+    # Strip away BEGIN:VCARD and END:VCARD
+    #
+    # This also supports the (invalid) encoding convention of allowing empty
+    # lines to be inserted for readability - it does this by dropping zero-length
+    # lines.
+    # Borrowed from https://github.com/qoobaa/vcard
+    def unfold(card)
+      unfolded = []
+
+      prior_line = nil
+      card.lines do |line|
+        line.chomp!
+        # If it's a continuation line, add it to the last.
+        # If it's an empty line, drop it from the input.
+        if line =~ /^[ \t]/
+          unfolded[-1] << line[1, line.size-1]
+        elsif line =~ /(^BEGIN:VCARD$)|(^END:VCARD$)/
+        elsif prior_line && (prior_line =~ UNTERMINATED_QUOTED_PRINTABLE)
+          # Strip the trailing = off prior line, then append current line
+          unfolded[-1] = prior_line[0, prior_line.length-1] + line
+        elsif line =~ /^$/
+        else
+          unfolded << line
+        end
+        prior_line = unfolded[-1]
+      end
+
+      unfolded
+    end
+
     def build_prop(name, *args)
       VCardigan::Property.create(self, name, *args)
     end
@@ -137,7 +172,7 @@ module VCardigan
       unless @fields.has_key? name
         @fields[name] = []
       end
-      
+
       # Add the property to the field array
       @fields[name].push(property)
 

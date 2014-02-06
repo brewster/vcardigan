@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
+        require 'pry'
 
 describe VCardigan::VCard do
 
@@ -245,6 +246,22 @@ describe VCardigan::VCard do
         fields.should have_key('fn')
       end
     end
-  end
 
+    context 'google 3.0 vCard' do
+      let(:data) { File.read(File.dirname(__FILE__) + '/../helpers/google.vcf') }
+      let(:vcard) { VCardigan.parse(data) }
+      let(:fields) { vcard.instance_variable_get(:@fields) }
+
+      it 'should set the version' do
+        vcard.version.should == '3.0'
+      end
+
+      it 'should add the properties to the fields array' do
+        fields.should have_key('n')
+        fields.should have_key('fn')
+        fields.should have_key('photo')
+        fields.should have_key('x-socialprofile')
+      end
+    end
+  end
 end
