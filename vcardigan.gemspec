@@ -13,4 +13,5 @@ spec = Gem::Specification.new do |s|
   s.test_files = Dir['spec/**/*.rb']
   s.has_rdoc = false
   s.add_development_dependency 'rspec', '~> 2.0'
+  s.add_development_dependency 'pry'
 end
