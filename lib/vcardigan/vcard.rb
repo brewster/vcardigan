@@ -69,6 +69,28 @@ module VCardigan
       add_prop(property)
     end
 
+    def remove(name)
+      if @fields.has_key?(name)
+        fields = @fields.delete(name)
+
+        fields.each do |field|
+          group_name = field.group
+          if group_name
+            group_field_names = @groups.delete(group_name).reject do |delete_field|
+              delete_field == name
+            end.map(&:name)
+
+            group_field_names.each do |field_name|
+              named_fields = @fields[field_name]
+              if named_fields
+                named_fields.delete_if {|prop| prop.group == group_name }
+              end
+            end
+          end
+        end
+      end
+    end
+
     def field(name)
       name = name.to_s.downcase
       if @group and @fields[name]

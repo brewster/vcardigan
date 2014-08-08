@@ -110,6 +110,50 @@ describe VCardigan::VCard do
     end
   end
 
+  describe "#remove" do
+    let(:vcard) { VCardigan.create }
+    let(:name) { :email }
+    let(:email) { 'joe@strummer.com' }
+    let(:params) { { :type => 'uri' } }
+    let(:fields) { vcard.instance_variable_get(:@fields) }
+
+    context "with no group" do
+      before do
+        vcard.add(name, email, params)
+      end
+
+      it "removes all occurances of the field" do
+        fields['email'].should_not be_empty
+
+        vcard.remove('email')
+
+        fields['email'].should be_nil
+      end
+    end
+
+    context "with groups" do
+      let(:group) { 'item1' }
+      let(:label) { 'Test Label' }
+      before do
+        vcard['item0'].add('tel', '235235')
+        vcard['item0'].add('x-ablabel', 'iPhone')
+        vcard[group].add(name, email)
+        vcard[group].add('x-ablabel', label)
+      end
+
+      it "removes all occurances of the field and its group label" do
+        vcard[group].email.first.value.should_not be_empty
+        vcard[group].send('x-ablabel').first.value.should == label
+
+        vcard.remove('email')
+
+        fields['email'].should be_nil
+
+        vcard[group].send('x-ablabel').should be_empty
+      end
+    end
+  end
+
   describe '#method_missing' do
     let(:vcard) { VCardigan.create }
 
