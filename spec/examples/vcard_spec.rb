@@ -284,6 +284,10 @@ describe VCardigan::VCard do
         vcard.version.should == '4.0'
       end
 
+      it 'should only have one version property' do
+        vcard.to_s.lines.count {|l| l =~ /^VERSION:/ }.should == 1
+      end
+
       it 'should add the properties to the fields array' do
         fields.should have_key('n')
         fields.should have_key('fn')

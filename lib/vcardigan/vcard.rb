@@ -31,6 +31,7 @@ module VCardigan
       lines.each do |line|
         if line =~ /^VERSION:(.+)/
           @version = $1
+          next
         end
 
         property = VCardigan::Property.parse(self, line)
