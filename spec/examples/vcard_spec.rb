@@ -274,6 +274,23 @@ describe VCardigan::VCard do
     end
   end
 
+  describe "#valid?" do
+    let(:vcard) { VCardigan.create }
+
+    context 'with no FN' do
+      it 'it should return false' do
+        expect( vcard.valid? ).to be_false
+      end
+    end
+
+    context 'with FN' do
+      it 'it should return true' do
+        vcard.fullname("My Name")
+        expect( vcard.valid? ).to be_true
+      end
+    end
+  end
+
   describe '#parse' do
     context 'valid 4.0 vCard' do
       let(:data) { File.read(File.dirname(__FILE__) + '/../helpers/joe.vcf') }

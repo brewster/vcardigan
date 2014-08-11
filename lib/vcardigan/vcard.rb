@@ -136,6 +136,13 @@ module VCardigan
       return vcard
     end
 
+    def valid?
+      validate
+      true
+    rescue VCardigan::EncodingError
+      false
+    end
+
     # Aliases ##########
 
     def name(*args)
