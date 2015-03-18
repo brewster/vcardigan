@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    vcardigan (0.0.4)
+    vcardigan (0.0.6)
 
 GEM
   remote: https://rubygems.org/
