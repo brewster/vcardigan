@@ -108,6 +108,31 @@ describe VCardigan::VCard do
         groups[group.to_s].first.should be_an_instance_of(VCardigan::Property)
       end
     end
+
+    context 'regardless of group' do
+
+      before do
+        vcard.add(name, *values)
+      end
+
+      context 'some args are nil' do
+
+        let(:values) { [nil, 'joe@strummer.com'] }
+
+        it 'should not build properties from nil args' do
+          fields[name.to_s].first.values.should == [values.last]
+        end
+      end
+
+      context 'all args are nil' do
+
+        let(:values) { [nil, nil] }
+
+        it 'should not build properties' do
+          fields[name.to_s].should be_nil
+        end
+      end
+    end
   end
 
   describe "#remove" do
