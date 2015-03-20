@@ -108,6 +108,20 @@ describe VCardigan::VCard do
         groups[group.to_s].first.should be_an_instance_of(VCardigan::Property)
       end
     end
+
+    context 'regardless of group' do
+      before do
+        vcard.add(name, *values)
+      end
+
+      context 'when all of the given values are nil' do
+        let(:values) { [nil, nil] }
+
+        it 'should not add anything to the fields hash' do
+          fields[name.to_s].should be_nil
+        end
+      end
+    end
   end
 
   describe "#remove" do
@@ -277,16 +291,23 @@ describe VCardigan::VCard do
   describe "#valid?" do
     let(:vcard) { VCardigan.create }
 
-    context 'with no FN' do
-      it 'it should return false' do
-        expect( vcard.valid? ).to be_false
+    context 'when full name has not been set' do
+      it 'should return false' do
+        expect(vcard).not_to be_valid
       end
     end
 
-    context 'with FN' do
-      it 'it should return true' do
+    context 'when full name has been set' do
+      it 'should return true' do
         vcard.fullname("My Name")
-        expect( vcard.valid? ).to be_true
+        expect(vcard).to be_valid
+      end
+    end
+
+    context 'when full name has been set to nil' do
+      it 'should return false' do
+        vcard.fullname(nil)
+        expect(vcard).not_to be_valid
       end
     end
   end
