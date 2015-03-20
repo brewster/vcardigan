@@ -56,6 +56,10 @@ module VCardigan
       end
     end
 
+    def respond_to_missing?(name, include_private = false)
+      true
+    end
+
     def add(name, *args)
       if @group
         # If there's a group, add it to the name
