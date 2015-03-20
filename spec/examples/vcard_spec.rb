@@ -110,25 +110,14 @@ describe VCardigan::VCard do
     end
 
     context 'regardless of group' do
-
       before do
         vcard.add(name, *values)
       end
 
-      context 'some args are nil' do
-
-        let(:values) { [nil, 'joe@strummer.com'] }
-
-        it 'should not build properties from nil args' do
-          fields[name.to_s].first.values.should == [values.last]
-        end
-      end
-
-      context 'all args are nil' do
-
+      context 'when all of the given values are nil' do
         let(:values) { [nil, nil] }
 
-        it 'should not build properties' do
+        it 'should not add anything to the fields hash' do
           fields[name.to_s].should be_nil
         end
       end
@@ -302,16 +291,23 @@ describe VCardigan::VCard do
   describe "#valid?" do
     let(:vcard) { VCardigan.create }
 
-    context 'with no FN' do
-      it 'it should return false' do
-        expect( vcard.valid? ).to be_false
+    context 'when full name has not been set' do
+      it 'should return false' do
+        expect(vcard).not_to be_valid
       end
     end
 
-    context 'with FN' do
-      it 'it should return true' do
+    context 'when full name has been set' do
+      it 'should return true' do
         vcard.fullname("My Name")
-        expect( vcard.valid? ).to be_true
+        expect(vcard).to be_valid
+      end
+    end
+
+    context 'when full name has been set to nil' do
+      it 'should return false' do
+        vcard.fullname(nil)
+        expect(vcard).not_to be_valid
       end
     end
   end
