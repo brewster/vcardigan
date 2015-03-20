@@ -65,13 +65,9 @@ module VCardigan
         @group = nil
       end
 
-      args.reject!(&:nil?)
-
       # Build the property and add it to the vCard
-      if args.any?
-        property = build_prop(name, *args)
-        add_prop(property)
-      end
+      property = build_prop(name, *args)
+      add_prop(property)
     end
 
     def remove(name)
