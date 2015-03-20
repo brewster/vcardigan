@@ -192,6 +192,14 @@ describe VCardigan::VCard do
     end
   end
 
+  describe '#respond_to?' do
+    let(:vcard) { VCardigan.create }
+
+    it 'should always return true, even for missing methods' do
+      expect(vcard).to respond_to(:whatever)
+    end
+  end
+
   describe '#field' do
     let(:vcard) { VCardigan.create }
     let(:fields) { vcard.instance_variable_get(:@fields) }
