@@ -120,7 +120,7 @@ describe VCardigan::VCard do
         let(:values) { [nil, 'joe@strummer.com'] }
 
         it 'should not build properties from nil args' do
-          fields[name.to_s].first.values.should == [values.last]
+          fields[name.to_s].first.values.count.should == values.count
         end
       end
 
