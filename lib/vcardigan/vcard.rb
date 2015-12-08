@@ -6,8 +6,8 @@ module VCardigan
     # it's not terminated
     UNTERMINATED_QUOTED_PRINTABLE = /ENCODING=QUOTED-PRINTABLE:.*=$/
 
-    attr_accessor :version
-    attr_accessor :chars
+    attr_accessor :version, :chars
+    attr_reader :fields, :groups
 
     def initialize(options = {})
       # Backwards compatibility
