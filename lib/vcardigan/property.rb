@@ -67,7 +67,7 @@ module VCardigan
       values = parts.last.split(';')
       params = parts.first.split(';')
       name = params.shift
-      
+
       # Create argument array
       args = [vcard, name]
 
@@ -84,7 +84,7 @@ module VCardigan
       # Instantiate a new class with the argument array
       self.create(*args)
     end
-    
+
     def value(idx = 0)
       @values[idx]
     end
@@ -143,15 +143,19 @@ module VCardigan
     end
 
     def param_value(name, value)
-      case name
-      when 'preferred'
-        value = value.to_s
-        number = value.to_i
-        if number > 0
-          value = number
-        else 
-          value = nil if value.downcase == 'false' or value == '0'
-          value = 1 if value
+      if value.is_a? Array
+        value = value.join(',')
+      else
+        case name
+        when 'preferred'
+          value = value.to_s
+          number = value.to_i
+          if number > 0
+            value = number
+          else
+            value = nil if value.downcase == 'false' or value == '0'
+            value = 1 if value
+          end
         end
       end
       value
